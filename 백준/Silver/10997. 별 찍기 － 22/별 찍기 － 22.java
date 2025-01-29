@@ -39,6 +39,7 @@ public class Main {
 		    for(int j=0; j<arr[i].length; j++) {
 		        if(arr[i][j] == 1) lastStar = j;
 		    }
+            // 별이 있는 칸까지만 출력 ( 그 뒤에 공백을 출력하면 틀렸다고 함)
 		    for(int j=0; j<=lastStar; j++) {
 		        if(arr[i][j] == 1) sb.append("*");
 		        else sb.append(" ");
