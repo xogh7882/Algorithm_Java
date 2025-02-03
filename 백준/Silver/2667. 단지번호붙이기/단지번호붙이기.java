@@ -29,6 +29,7 @@ public class Main {
 				if(map[i][j] == 1) {
 					cnt++;
 					bfs(i,j,cnt+1);
+					//dfs(i,j,cnt+1);
 				}
 			}
 		}
@@ -49,6 +50,7 @@ public class Main {
 		}
 		
 	}
+	
 	private static void bfs(int cr, int cc, int group) {
 		Queue<int[]> queue = new LinkedList<>();
 		queue.offer(new int[] {cr,cc});
@@ -73,5 +75,18 @@ public class Main {
 		return r>=0 && r<N && c>=0 && c<N;
 	}
 	
-
+	
+	private static void dfs(int cr, int cc, int g) {
+		map[cr][cc] = g;
+		for(int i=0;i<4;i++) {
+			int nr = cr + dr[i];
+			int nc = cc + dc[i];
+			if(!check(nr,nc)) continue;
+			if(map[nr][nc] == 1) {
+				map[nr][nc] = g;
+				dfs(nr,nc,g);
+			}
+		}
+	}
+	
 }
