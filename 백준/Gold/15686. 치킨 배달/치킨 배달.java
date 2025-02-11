@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 // map에서 돌리니깐 시간초과
 // 그냥 위치만 따로 저장할까
-// 차피 값만 계산하니깐 흠..
+// 차피 값만 계산하니깐
 
 public class Main {
 	static int N,M;
