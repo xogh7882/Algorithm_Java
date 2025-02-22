@@ -72,7 +72,7 @@ public class Main {
 
 
 	private static void calc() {
-		Stack<Integer> stack = new Stack<>();
+		List<Integer> stack = new ArrayList<>();
 		stack.add(Integer.parseInt(list.get(0)));
 		for(int i=1;i<list.size();i=i+2) {
 			if(list.get(i).equals("+")) {
@@ -82,18 +82,21 @@ public class Main {
 				stack.add(Integer.parseInt(list.get(i+1))*-1);
 			}
 			else if(list.get(i).equals("*")) {
-				int temp = stack.pop();
+				int temp = stack.get(stack.size()-1);
+				stack.remove(stack.size()-1);
 				stack.add(Integer.parseInt(list.get(i+1))*temp);
 			}
 			else if(list.get(i).equals("/")) {
-				int temp = stack.pop();
+				int temp = stack.get(stack.size()-1);
+				stack.remove(stack.size()-1);
 				stack.add(temp/Integer.parseInt(list.get(i+1)));
 			}
 			
 		}
 		int sum = 0;
-		while(!stack.empty()) {
-			sum+=stack.pop();
+		while(!stack.isEmpty()) {
+			sum+=stack.get(stack.size()-1);
+			stack.remove(stack.size()-1);
 		}
 		if(sum > max) max = sum;
 		if(sum < min) min = sum;
