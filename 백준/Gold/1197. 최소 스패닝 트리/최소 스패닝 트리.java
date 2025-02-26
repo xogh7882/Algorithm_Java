@@ -23,9 +23,9 @@ public class Main {
 		
 	}
 	
-	static PriorityQueue<Edge> points;
-	static int[] p;  // parent
-	static int[] r;  // rank
+	static PriorityQueue<Edge> points;   // w가 작은 것부터 나오도록 쁘리아라라큐 사용
+	static int[] p;  // parent ( 최종 부모 )
+	static int[] r;  // rank  ( 나랑 몇개가 연결되어있게? )
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -60,8 +60,8 @@ public class Main {
 	private static boolean union(int x, int y) {
 		x = find(x);
 		y = find(y);
-		if(x==y) return false;
-		if(r[x] < r[y]) {
+		if(x==y) return false;  // 최종 부모가 같다 = 이미 연결되어있다.
+		if(r[x] < r[y]) {    // rank가 큰 쪽으로 붙는다.
 			r[y] += r[x];
 			p[x] = y;
 		}else {
@@ -71,7 +71,7 @@ public class Main {
 		return true;
 	}
 
-	private static int find(int x) {
+	private static int find(int x) {   // 최종 부모까지 재귀로 찾기
 		if(x ==p[x]) return p[x];
 		else return find(p[x]);
 	}
@@ -80,8 +80,8 @@ public class Main {
 		p = new int[V+1];
 		r = new int[V+1];
 		for (int i = 0; i < V+1; i++) {
-			p[i] = i;
-			r[i] = 1;
+			p[i] = i;  // 각각 분리되어 있어서 자기가 최종 부모
+			r[i] = 1;  // 처음에는 각각 다 떨어져있어서 그룹당 1개
 		}
 	}
 
