@@ -1,132 +1,92 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Queue;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int R, C;
-	static boolean map[][];
-	static boolean visitedF[][];
-	static boolean visitedJ[][];
-	static List<int[]> listF;
-	static List<int[]> listJ;
-	static int time = 1;
-	
-	static int dr[] = {1,-1,0,0};
-	static int dc[] = {0,0,1,-1};
+	static int R,C;
+	static int map[][];
+	static Deque<int[]> queue;
+	static int result = 0;
+	static int dr[] = {0,0,-1,1};
+	static int dc[] = {1,-1,0,0};
+	static boolean visited[][];
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
-		map = new boolean[R][C];
-		visitedJ = new boolean[R][C];
-		visitedF = new boolean[R][C];
-		listF = new ArrayList<>();
-		listJ = new ArrayList<>();
+		
+		map = new int[R][C];
+		queue = new ArrayDeque<>();
+		visited = new boolean[R][C];
 		
 		for(int i=0;i<R;i++) {
 			String str = br.readLine();
 			for(int j=0;j<C;j++) {
 				char ch = str.charAt(j);
-				if(ch == '#') {
-					map[i][j] = false;
-					visitedF[i][j] = true;
+				if(ch=='#') {
+					map[i][j] = -1;
 				}
-				else if(ch=='.') map[i][j] = true;
+				else if(ch=='.') map[i][j] = 0;
 				else if(ch=='J') {
-					map[i][j] = true;
-					visitedJ[i][j] = true;
-					listJ.add(new int[] {i,j});
+					map[i][j] = 1;
+					queue.add(new int[] {1,i,j});
 				}
 				else if(ch=='F') {
-					map[i][j] = false;
-					visitedF[i][j] = true;
-					listF.add(new int[] {i,j});
+					map[i][j] = -2;
+					queue.addFirst(new int[] {2,i,j});;
 				}
 			}
 		}
 		
-		while(true) {
-//			printMap();
-			spreadFire();
-			if(escape() == true) {
-				break;
+		result = BFS();
+		
+		if(result == -1) System.out.println("IMPOSSIBLE");
+		else System.out.println(result);
+
+	}
+	private static int BFS() {
+		int size = queue.size();
+		int time = 1;
+		
+		while(!queue.isEmpty()) {
+			if(size==0) {
+				size = queue.size();
+				time++;
 			}
-			if(listJ.isEmpty()) {
-				time = -1;
-				break;
-			}
-			time++;
-		}
 			
-		if(time == -1) System.out.println("IMPOSSIBLE");
-		else System.out.println(time);
-		
-	}
-
-	private static void printMap() {
-		System.out.println("------------------------------");
-		for(int i=0;i<R;i++) {
-			System.out.println(Arrays.toString(map[i]));
-		}
-		
-	}
-
-	private static boolean escape() {
-		Queue<int[]> queue = new ArrayDeque<>();
-		for(int i=0;i<listJ.size();i++) {
-			queue.offer(listJ.get(i));
-		}
-		listJ.clear();
-		while(!queue.isEmpty()) {
 			int temp[] = queue.poll();
-			int r = temp[0];
-			int c = temp[1];
+			int flag = temp[0];
+			int r = temp[1];
+			int c = temp[2];
+			size--;
 			for(int i=0;i<4;i++) {
 				int nr = r + dr[i];
 				int nc = c + dc[i];
-				if(check(nr,nc) == false) return true;
-				if(check(nr,nc) && visitedJ[nr][nc] == false && map[nr][nc] == true) {
-					visitedJ[nr][nc] = true;
-					listJ.add(new int[] {nr,nc});
+				if(flag==1) {  //사람
+					if(check(nr,nc)==false) return time;
+					if(check(nr,nc)==true && map[nr][nc] == 0 && visited[nr][nc] == false) {
+						queue.offer(new int[] {1,nr,nc});
+						visited[nr][nc] = true;
+					}
 				}
-			}
-		}
-		return false;
-	}
-
-	private static void spreadFire() {
-		Queue<int[]> queue = new ArrayDeque<>();
-		for(int i=0;i<listF.size();i++) {
-			queue.offer(listF.get(i));
-		}
-		listF.clear();
-		while(!queue.isEmpty()) {
-			int temp[] = queue.poll();
-			int r = temp[0];
-			int c = temp[1];
-			for(int i=0;i<4;i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
-				if(check(nr,nc)==true && visitedF[nr][nc] == false && map[nr][nc] == true) {
-					map[nr][nc] = false;
-					visitedF[nr][nc] = true;
-					listF.add(new int[] {nr,nc});
+				else if(flag==2) { //불
+					if(check(nr,nc)==true && map[nr][nc] != -1 && map[nr][nc] != -2) {
+						map[nr][nc] = -2;
+						queue.offer(new int[] {2,nr,nc});
+					}
 				}
 			}
 		}
 		
+		return -1;
 	}
-
 	private static boolean check(int r, int c) {
 		return r>=0 && r<R && c>=0 && c<C;
 	}
-
 
 }
