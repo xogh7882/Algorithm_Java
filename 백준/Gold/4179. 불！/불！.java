@@ -1,13 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 	static int R,C;
 	static int map[][];
-	static Deque<int[]> queue;
+	static Queue<int[]> queue;
 	static int result = 0;
 	static int dr[] = {0,0,-1,1};
 	static int dc[] = {1,-1,0,0};
@@ -24,6 +24,9 @@ public class Main {
 		queue = new ArrayDeque<>();
 		visited = new boolean[R][C];
 		
+		int startR = -1;
+		int startC = -1;
+		
 		for(int i=0;i<R;i++) {
 			String str = br.readLine();
 			for(int j=0;j<C;j++) {
@@ -34,15 +37,16 @@ public class Main {
 				else if(ch=='.') map[i][j] = 0;
 				else if(ch=='J') {
 					map[i][j] = 1;
-					queue.add(new int[] {1,i,j});
+					startR = i;
+					startC = j;
 				}
 				else if(ch=='F') {
 					map[i][j] = -2;
-					queue.addFirst(new int[] {2,i,j});;
+					queue.offer(new int[] {2,i,j});;
 				}
 			}
 		}
-		
+		queue.offer(new int[] {1,startR,startC});
 		result = BFS();
 		
 		if(result == -1) System.out.println("IMPOSSIBLE");
