@@ -1,104 +1,87 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 	static int N;
 	static int map[][];
-	static int result = 0;
-	static int count;
-	static boolean num[];
+	static int start = Integer.MAX_VALUE;
+	static int end = Integer.MIN_VALUE;
+	static int result = 1;
+	static int dr[] = {1,-1,0,0};
+	static int dc[] = {0,0,1,-1};
 	static boolean visited[][];
 	
-	static int[] dr = {1,-1,0,0};
-	static int[] dc = {0,0,1,-1};
 	
-	static List<Integer> list;
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
 		N = Integer.parseInt(st.nextToken());
-		num = new boolean[101];
+		
 		map = new int[N][N];
 		
 		for(int i=0;i<N;i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0;j<N;j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if(num[map[i][j]] == false) num[map[i][j]] = true;
+				start = Math.min(map[i][j], start);
+				end = Math.max(map[i][j], end);
 			}
 		}
-	
 		
-		list = new ArrayList<>();
 		
-		list.add(0);  // 비가 안오는 경우
-		
-		for(int i=1;i<=100;i++) {
-			if(num[i] == true) list.add(i);
-		}
-		
-		for(int k=0;k<list.size();k++) {
+		for(int i=0;i<=100;i++) {
 			visited = new boolean[N][N];
-			count = 0;
-			for(int i=0;i<N;i++) {
-				for(int j=0;j<N;j++) {
-					if(visited[i][j] == false && map[i][j]>list.get(k)) {
-						//BFS(i,j,list.get(k));
-						DFS(i,j,list.get(k));
-						count++;
-					}
-				}
-			}
-			if(count > result) result = count;
+			result = Math.max(result, find(i));
 		}
-		
-		
 		
 		System.out.println(result);
 	}
-	
-	private static void DFS(int startR, int startC, int n) {
-		visited[startR][startC] = true;
-		for(int i=0;i<4;i++) {
-			int nr = startR + dr[i];
-			int nc = startC + dc[i];
-			if(check(nr,nc) && map[nr][nc] > n && visited[nr][nc] == false) {
-				DFS(nr,nc,n);
+
+
+	private static int find(int limit) {
+		int sum = 0;
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				if(map[i][j] > limit && visited[i][j] == false) {
+					BFS(i,j,limit);
+					sum++;
+				}
 			}
 		}
-		
+		return sum;
 	}
 
-	private static void BFS(int startR, int startC, int n) {
+
+	private static void BFS(int r, int c, int limit) {
 		Queue<int[]> queue = new ArrayDeque<>();
-		queue.offer(new int[] {startR, startC});
+		queue.offer(new int[] {r,c});
+		visited[r][c] = true;
+		
 		while(!queue.isEmpty()) {
-			int[] temp = queue.poll();
-			int r = temp[0];
-			int c = temp[1];
-			visited[r][c] = true;
-			
+			int temp[] = queue.poll();
+			int cr = temp[0];
+			int cc = temp[1];
 			for(int i=0;i<4;i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
-				if(check(nr,nc) && map[nr][nc] > n && visited[nr][nc] == false) {
+				int nr = cr + dr[i];
+				int nc = cc + dc[i];
+				if(check(nr,nc)==true && map[nr][nc] > limit && visited[nr][nc]==false) {
+					visited[nr][nc] = true;
 					queue.offer(new int[] {nr,nc});
 				}
 			}
 		}
+		
 	}
+
 
 	private static boolean check(int r, int c) {
-		return r >=0 && r<N && c>=0 && c<N;
+		return r>=0 && r<N && c>=0 && c<N;
 	}
-	
-	
-	
 
+
+	
 }
