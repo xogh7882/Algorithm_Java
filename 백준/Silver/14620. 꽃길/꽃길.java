@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-// 원래는 list에 좌표 저장했는데
-// 1차원으로 좌표값 저장하면 더 빠름!
-
 public class Main {
 	static int N;
 	static int map[][];
@@ -46,6 +43,7 @@ public class Main {
 			return;
 		}
 		for(int i=start;i<N*N;i++) {
+			if(i/N==0 || i/N==N-1 || i%N==0 || i%N == N-1) continue;   // 가장자리는 못놓는다
 			if(selectvisited[i]) continue;
 			selectvisited[i] = true;
 			select[cnt] = i;
