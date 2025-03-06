@@ -55,33 +55,22 @@ public class Main {
 
 	
 	private static void BFS() {
-		int flag = 0;
-		Queue<int[]> queue = new ArrayDeque<>();
-		for(int i=0;i<select.length;i++) {
-			queue.offer(new int[] {select[i]/N, select[i]%N});
-		}
 		
-		aa:while(!queue.isEmpty()) {
-			int temp[] = queue.poll();
-			int r = temp[0];
-			int c = temp[1];
-			visited[r][c] = true;
+		for(int i=0;i<select.length;i++) {
+			int r = select[i]/N;
+			int c = select[i]%N;
 			
-			for(int i=0;i<4;i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
+			visited[r][c] = true;
+			for(int d=0;d<4;d++) {
+				int nr = r + dr[d];
+				int nc = c + dc[d];
 				if(check(nr,nc) == false || visited[nr][nc]) {
-					flag = 1;
-					break aa;
+					return;
 				}
 				visited[nr][nc] = true;
 			}
 		}
-		
-		if(flag==0) calc();
-		
-		return;
-		
+		calc();
 	}
 
 	private static boolean check(int r, int c) {
