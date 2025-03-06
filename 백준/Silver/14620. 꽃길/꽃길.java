@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main{
+// 원래는 list에 좌표 저장했는데
+// 1차원으로 좌표값 저장하면 더 빠름!
+
+public class Main {
 	static int N;
 	static int map[][];
-	static boolean selectvisited[][];
+	static boolean selectvisited[];
 	static boolean visited[][];
 	static int dr[] = {1,-1,0,0};
 	static int dc[] = {0,0,1,-1};
 	static int result = Integer.MAX_VALUE;
 	
-	static List<int[]> list;
+	static int select[];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -28,26 +31,27 @@ public class Main{
 				map[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-		selectvisited = new boolean[N][N];
-		list = new ArrayList<>();
-		perm(0);
+		selectvisited = new boolean[N*N];
+		select = new int[3];
+		
+		combi(0,0);
 		
 		System.out.println(result);
 	}
 
-	private static void perm(int cnt) {
+	private static void combi(int cnt, int start) {
 		if(cnt==3) {
 			visited = new boolean[N][N];
 			BFS();
 			return;
 		}
-		for(int i=1;i<N-1;i++) {
-			for(int j=1;j<N-1;j++) {
-				if(selectvisited[i][j]) continue;
-				list.add(new int[] {i,j});
-				perm(cnt+1);
-				list.remove(list.size()-1);
-			}
+		for(int i=start;i<N*N;i++) {
+			if(selectvisited[i]) continue;
+			selectvisited[i] = true;
+			select[cnt] = i;
+			combi(cnt+1, i);
+			select[cnt] = 0;
+			selectvisited[i] = false;
 		}
 	}
 
@@ -55,8 +59,8 @@ public class Main{
 	private static void BFS() {
 		int flag = 0;
 		Queue<int[]> queue = new ArrayDeque<>();
-		for(int i=0;i<list.size();i++) {
-			queue.offer(list.get(i));
+		for(int i=0;i<select.length;i++) {
+			queue.offer(new int[] {select[i]/N, select[i]%N});
 		}
 		
 		aa:while(!queue.isEmpty()) {
@@ -68,7 +72,7 @@ public class Main{
 			for(int i=0;i<4;i++) {
 				int nr = r + dr[i];
 				int nc = c + dc[i];
-				if(visited[nr][nc]) {
+				if(check(nr,nc) == false || visited[nr][nc]) {
 					flag = 1;
 					break aa;
 				}
@@ -80,6 +84,10 @@ public class Main{
 		
 		return;
 		
+	}
+
+	private static boolean check(int r, int c) {
+		return r>=0 && r<N && c>=0 && c<N;
 	}
 
 	private static void calc() {
