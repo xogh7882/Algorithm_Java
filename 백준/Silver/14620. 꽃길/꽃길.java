@@ -55,12 +55,14 @@ public class Main {
 
 	
 	private static void BFS() {
-		
+		int sum = 0;
 		for(int i=0;i<select.length;i++) {
 			int r = select[i]/N;
 			int c = select[i]%N;
 			
 			visited[r][c] = true;
+			sum += map[r][c];
+			
 			for(int d=0;d<4;d++) {
 				int nr = r + dr[d];
 				int nc = c + dc[d];
@@ -68,25 +70,14 @@ public class Main {
 					return;
 				}
 				visited[nr][nc] = true;
+				sum += map[nr][nc];
 			}
 		}
-		calc();
+		result = Math.min(result, sum);
 	}
 
 	private static boolean check(int r, int c) {
 		return r>=0 && r<N && c>=0 && c<N;
-	}
-
-	private static void calc() {
-		int sum = 0;
-		for(int i=0;i<N;i++) {
-			for(int j=0;j<N;j++) {
-				if(visited[i][j] == true) sum+=map[i][j];
-			}
-		}
-		result = Math.min(result, sum);
-		return;
-		
 	}
 }
 
