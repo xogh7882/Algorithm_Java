@@ -5,6 +5,11 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+// 빈 공간을 기준으로 BFS 돌린다
+// 그걸로 빈 공간의 사이즈 체크
+// 그 공간이랑 만나는 벽을 다른 큐에 넣는다
+// 그 벽에 사이즈를 더해주면 그 벽이 부서졌을때 갈 수 있는 크기!!!!!!
+
 public class Main {
 	static int N,M;
 	static int map[][];
