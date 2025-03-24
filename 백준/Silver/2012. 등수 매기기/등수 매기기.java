@@ -1,15 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
 
 public class Main{
 
 	static int N;
-	static int rank[];
-	static PriorityQueue<Integer> queue;
+	static boolean rank[];
+	static int arr[];
 	static long result = 0;
 	
 	
@@ -18,25 +16,27 @@ public class Main{
 		
 		N = Integer.parseInt(br.readLine());
 		
-		rank = new int[N+1];
+		rank = new boolean[N+1];
 		
-		queue = new PriorityQueue<>();
+		arr = new int[500_001];
+		Arrays.fill(arr, 500_001);
 		
+		int cnt = 0;
 		for(int i=1;i<=N;i++) {
 			int t = Integer.parseInt(br.readLine());
-			if(t > N) queue.offer(t);
-			else if(rank[t] == 0) rank[t] = i;
+			if(t > N) arr[cnt++] = t;
+			else if(rank[t] == false) rank[t] = true;
 			else {
-				queue.offer(t);
+				arr[cnt++] = t;
 			}
 		}
 		
-		int k = 0;
+		Arrays.sort(arr);
 		
+		cnt = 0;
 		for(int i=1;i<=N;i++) {
-			if(rank[i] == 0) {
-				k = queue.poll();
-				result+=Math.abs(i-k);
+			if(rank[i] == false) {
+				result+=Math.abs(i-arr[cnt++]);
 			}
 		}
 		
