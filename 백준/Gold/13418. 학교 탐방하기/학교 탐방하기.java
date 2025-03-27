@@ -25,7 +25,7 @@ public class Main {
 	static long max=0;
 	static long min=0;
 	
-	static int p[];
+	static int p[], r[];
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -47,14 +47,11 @@ public class Main {
 			
 			queue1.offer(new Edge(s,e,w));
 			queue2.offer(new Edge(s,e,w));
-			
-				
+	
 		}
 		
 		makeset();
 		min = MST(queue1);
-		
-//		System.out.println("=============================================");
 		
 		makeset();
 		max = MST(queue2);
@@ -65,13 +62,15 @@ public class Main {
 
 
 	private static long MST(PriorityQueue<Edge> queue) {
+		int cnt = 0;
 		long result = 0;
 		while(!queue.isEmpty()) {
 			Edge edge = queue.poll();
 			
 			if(union(edge.s, edge.e) == false ) continue;
 			result += edge.w;
-//			System.out.println(edge.s + " -> " + edge.e + " ( " + edge.w + " ) ");
+			cnt++;
+			if(cnt==N) break;
 		}
 		return result;
 	}
@@ -82,7 +81,14 @@ public class Main {
 		y = find(y);
 		if(x==y) return false;
 		
-		p[x] = p[y];
+		if(r[x] > r[y]) {
+			r[x] += r[y];
+			p[y] = x;
+		}
+		else {
+			r[y] += r[x];
+			p[x] = y;
+		}
 		
 		return true;
 	}
@@ -96,10 +102,12 @@ public class Main {
 
 	private static void makeset() {
 		p = new int[N+1];
+		r = new int[N+1];
+		
 		for(int i=0;i<=N;i++) {
 			p[i] = i;
+			r[i] = 1;
 		}
-		
 	}
 
 }
