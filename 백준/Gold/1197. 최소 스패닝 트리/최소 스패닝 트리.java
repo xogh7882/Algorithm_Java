@@ -3,8 +3,6 @@ import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// Kruskal Algorithm
-
 public class Main {
 	static int V,E;
 	static long min;
