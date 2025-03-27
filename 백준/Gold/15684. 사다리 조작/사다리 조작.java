@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
@@ -12,6 +11,8 @@ public class Main {
     static int count;
     static int t = 1;
     
+    static int ladder[];
+    
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -22,6 +23,8 @@ public class Main {
         
         map = new int[H+1][N+2];   // N+2 : 왼쪽 오른쪽 공간 두기
         
+        ladder = new int[N+1];    // 각 라인에 설치된 사다리 개수
+        
         for(int i=0;i<M;i++) {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
@@ -29,16 +32,21 @@ public class Main {
             
             map[a][b] = t;
             map[a][b+1] = t;
-            t++;
+            t++;                 // t는 사다리 그릴때 쓰려고 사용 -> printMap()
+            
+            ladder[b]++;         // 사다리 개수 추가
+            
         }
         
 //        printMap();
+        
         resultValue = -1;
         
         // 각 자리에서 내려갔을때 자기자리 나오는지 확인하는 함수 만들고
         // 사다리 Combi(1) , Combi(2) , Combi(3) 돌리기
+        
         result = check();
-        if(result == true) resultValue = 0;
+        if(result == true) resultValue = 0;     // 설치 안해도 바로 성공하는 경우
         else {
             for(int i=1;i<=3;i++) {
                 count = i;
@@ -49,8 +57,7 @@ public class Main {
                 }
             }
         }
-        
-
+       
         
         System.out.println(resultValue);
     }
@@ -60,6 +67,7 @@ public class Main {
         if(result == true) return;
         
         if(cnt==count) {
+        	if(laddercheck()==false) return;
             if(check()==true) result = true;
             //printMap();
             return;
@@ -69,7 +77,11 @@ public class Main {
                 if(map[i][j] == 0 && map[i][j+1] == 0) {
                     map[i][j] = cnt+t;
                     map[i][j+1] = cnt+t;
+                    ladder[j]++;
+                    
                     combi(cnt+1, i);
+                    
+                    ladder[j]--;
                     map[i][j+1] = 0;
                     map[i][j] = 0;
                 }
@@ -78,7 +90,17 @@ public class Main {
     }
 
 
-    private static boolean check() {
+    private static boolean laddercheck() {
+    	int cnt = 0;
+		for(int i=1;i<=N;i++) {
+			if(ladder[i] != 0 && ladder[i]%2!=0) cnt++;
+		}
+		if(cnt > 3) return false;
+		else return true;
+	}
+
+
+	private static boolean check() {
         int r,c;
         for(int i=1;i<=N;i++) {
             r = 1;
