@@ -1,29 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-public class Main{
+public class Main {
 	static int T;
 	static int N;
-	static class score implements Comparable<score>{
-		int scoreA;
-		int scoreB;
-		public score( int scoreA, int scoreB) {
-			super();
-			this.scoreA = scoreA;
-			this.scoreB = scoreB;
-		}
-		@Override
-		public int compareTo(score o) {
-			return Integer.compare(this.scoreA, o.scoreA);
-		}
-		
-	}
+	
+	static int score[];
+	
 	static int result;
 	static StringBuilder sb = new StringBuilder();
 	
@@ -37,31 +21,20 @@ public class Main{
 		{
 			result = 0;
 			N = Integer.parseInt(br.readLine());
+			score = new int[N+1];
 			
-			List<score> list = new ArrayList<>();
-			
-			for(int i=1;i<=N;i++) {
+			for(int i=0;i<N;i++) {
 				st = new StringTokenizer(br.readLine());
 				int a = Integer.parseInt(st.nextToken());
 				int b = Integer.parseInt(st.nextToken());
-				list.add(new score(a,b));
+				
+				score[a] = b;
 			}
-			
-			Collections.sort(list);
-			
-			int min = -1;
-			
-			for(int i=0;i<N;i++) {
-				score temp = list.get(i);
-				if(i==0) {
-					min = temp.scoreB;
+			int min = N+1;
+			for(int i=1;i<=N;i++) {
+				if(score[i] < min) {
+					min = score[i];
 					result++;
-				}
-				else {
-					if(temp.scoreB < min) {
-						min = temp.scoreB;
-						result++;
-					}
 				}
 			}
 			
