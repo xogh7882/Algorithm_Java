@@ -36,6 +36,7 @@ public class Main {
 					min = score[i];
 					result++;
 				}
+				if(min==1) break;
 			}
 			
 			sb.append(result).append("\n");
