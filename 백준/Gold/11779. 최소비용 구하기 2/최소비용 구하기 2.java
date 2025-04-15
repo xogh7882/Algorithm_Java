@@ -92,7 +92,6 @@ public class Main {
 	}
 	
 	private static void Dijkstra() {
-		int b = start;
 		boolean visited[] = new boolean[N+1];
 		PriorityQueue<Edge> queue = new PriorityQueue<>();
 		queue.offer(new Edge(start,start,0));
