@@ -15,6 +15,7 @@ public class Main {
 		StringTokenizer st;
 		
 		T = Integer.parseInt(br.readLine());
+		
 		for(int test = 1 ; test<= T ; test++)
 		{
 			st = new StringTokenizer(br.readLine());
@@ -28,8 +29,12 @@ public class Main {
 			}
 			
 			result = 0;
-			Arrays.sort(arr);
-			combi(0,0);
+			
+			for(int i=0;i<N-1;i++) {
+				for(int j=i+1;j<N;j++) {
+					result += gcd(arr[i], arr[j]);
+				}
+			}
 			
 			System.out.println(result);
 			
@@ -37,26 +42,10 @@ public class Main {
 
 	}
 
-	private static void combi(int cnt, int start) {
-		if(cnt==2) {
-			result += gcd(p[0], p[1]);
-			return;
-		}
-		for(int i=start;i<N;i++) {
-			if(visited[i]) continue;
-			visited[i] = true;
-			p[cnt] = arr[i];
-			combi(cnt+1, i+1);
-			p[cnt] = 0;
-			visited[i] = false;
-		}
-		
-		
-	}
 
 	private static int gcd(int a, int b) {
-		if(a==0) return b;
-		else return gcd(Math.max(a, b)%Math.min(a, b), Math.min(a, b));
+		if(b==0) return a;
+		else return gcd(b, a%b);
 	}
 
 
