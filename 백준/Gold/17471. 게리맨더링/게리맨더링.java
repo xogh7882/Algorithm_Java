@@ -1,8 +1,3 @@
-// 구역을 A, B로 나눈다
-// visited는 하나만 쓴다
-// 구간을 나누고, 각자 BFS를 돌린다
-// visited에 안간게 있다 = 제대로 못나눈거
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
@@ -13,116 +8,112 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static int N;
-	static int[] nums;               
-	static List<Integer>[] list;    
-	static boolean[] visited;        
-	static int result = Integer.MAX_VALUE;
-
+	static int num[];
+	static List<Integer> list[];
+	static int result = Integer.MAX_VALUE/10;
+	static boolean visited[];
 	
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(
-				new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		nums = new int[N];
-		visited = new boolean[N];
-		list = new ArrayList[N];
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		N = Integer.parseInt(br.readLine());
+		num = new int[N+1];
 		
-		for(int i=0;i<N;i++) {
+		st = new StringTokenizer(br.readLine());
+		for(int i=1;i<=N;i++) {
+			num[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		list = new ArrayList[N+1];
+		for(int i=0;i<N+1;i++) {
 			list[i] = new ArrayList<>();
 		}
 		
-		st = new StringTokenizer(br.readLine());
-		for(int i=0;i<N;i++) {
-			nums[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		for(int i=0;i<N;i++) {
-			int s = i;
+		for(int i=1;i<=N;i++) {
 			st = new StringTokenizer(br.readLine());
 			int M = Integer.parseInt(st.nextToken());
 			for(int j=0;j<M;j++) {
-				int e = Integer.parseInt(st.nextToken());
-				list[s].add(e-1);
+				int k = Integer.parseInt(st.nextToken());
+				list[i].add(k);
 			}
 		}
 		
-		subset(0);
-		if(result == Integer.MAX_VALUE) result = -1;
+		visited = new boolean[N+1];
+		subset(0,1);
+		
+		if(result == Integer.MAX_VALUE/10) result = -1;
 		System.out.println(result);
 		
-		
 	}
 
 
-
-	private static void subset(int cnt) {
-		if(cnt == N) {
-				
-			conn(visited);
+	private static void subset(int cnt, int start) {
+		if(cnt==N) {
+			calc();
 			return;
 		}
-		visited[cnt] = true;
-		subset(cnt+1);
-		visited[cnt] = false;
-		subset(cnt+1);
+		
+		for(int i=start;i<=N;i++) {
+			visited[i] = true;
+			subset(cnt+1, i+1);
+			visited[i] = false;
+			subset(cnt+1, i+1);
+		}
 		
 	}
 
-	private static void conn(boolean[] visitedAB) {
+
+	private static void calc() {
 		List<Integer> teamA = new ArrayList<>();
 		List<Integer> teamB = new ArrayList<>();
 		
-		for(int i=0;i<N;i++) {
-			if(visitedAB[i]) teamA.add(i);
+		for(int i=1;i<=N;i++) {
+			if(visited[i] == true) teamA.add(i);
 			else teamB.add(i);
 		}
 		
-		if(teamA.isEmpty() || teamB.isEmpty()) return;
+		if(teamA.size()==0 || teamB.size()==0) return;
 		
-		boolean BFSVisited[] = new boolean[N];
-		BFS(teamA, BFSVisited, true);
-		BFS(teamB, BFSVisited, false);
-		
-		for(int i=0;i<N;i++) {
-			if(BFSVisited[i] == false) return;
+		boolean vis[] = new boolean[N+1];
+		BFS(teamA, vis);
+		for(int i=0;i<teamA.size();i++) {
+			if(vis[teamA.get(i)] == false) return;
 		}
-		calcTeam();
-		return;
+		
+		vis = new boolean[N+1];
+		BFS(teamB, vis);
+		for(int i=0;i<teamB.size();i++) {
+			if(vis[teamB.get(i)] == false) return;
+		}
+		
+		result = Math.min(result, Math.abs(teamsum(teamA) - teamsum(teamB)));
 	}
 
 
-
-	private static void calcTeam() {
-		int A = 0;
-		int B = 0;
-		for(int i=0;i<N;i++) {
-			if(visited[i] == true) A+=nums[i];
-			else B+=nums[i];
+	private static int teamsum(List<Integer> team) {
+		int sum = 0;
+		for(int i=0;i<team.size();i++) {
+			sum += num[team.get(i)];
 		}
-		if(result > Math.abs(A-B)) result = Math.abs(A-B);
+		return sum;
 	}
 
 
-
-	private static void BFS(List<Integer> team, boolean[] BFSVisited, boolean flag) {
+	private static void BFS(List<Integer> team, boolean[] vis) {
 		Queue<Integer> queue = new ArrayDeque<>();
-		queue.add(team.get(0));
+		queue.offer(team.get(0));
 		
 		while(!queue.isEmpty()) {
 			int k = queue.poll();
-			BFSVisited[k] = true;
+			vis[k] = true;
 			for(int i=0;i<list[k].size();i++) {
-				if(visited[list[k].get(i)] == flag && BFSVisited[list[k].get(i)] == false) {
-					queue.add(list[k].get(i));
-
+				if(vis[list[k].get(i)] ==false && team.contains(list[k].get(i))) {
+					vis[list[k].get(i)] = true;
+					queue.offer(list[k].get(i));
 				}
 			}
 		}
-		
 	}
-
-
-
 
 }
