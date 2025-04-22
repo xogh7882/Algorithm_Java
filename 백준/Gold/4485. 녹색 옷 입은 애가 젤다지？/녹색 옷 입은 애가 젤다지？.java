@@ -1,49 +1,32 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int cnt = 1;
-	static StringTokenizer st;
 	static int N;
-	static int[][] map;
-	static int[][] cost;
-	static int[] dr = {-1,1,0,0};
-	static int[] dc = {0,0,-1,1};
-
+	static int num = 1;
+	static int map[][];
+	static int cost[][];
+	static int dr[] = {0,1,0,-1};
+	static int dc[] = {1,0,-1,0};
 	
-	static class Cell implements Comparable<Cell>{
-		int r;
-		int c;
-		int cost;
-		public Cell(int r, int c, int cost) {
-			super();
-			this.r = r;
-			this.c = c;
-			this.cost = cost;
-		}
-		public Cell() {
-
-		}
-		@Override
-		public int compareTo(Cell o) {
-			return Integer.compare(this.cost, o.cost);
-		}
-	}
-	
-	public static void main(String[] args) throws Exception{
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		StringBuilder sb = new StringBuilder();
+		
 		while(true) {
-			st = new StringTokenizer(br.readLine());
-			N = Integer.parseInt(st.nextToken());
-			if(N == 0) break;
-			
+
+			N = Integer.parseInt(br.readLine());
+			if(N==0) break;
 			map = new int[N][N];
-			cost = new int[N][N];
+			cost= new int[N][N];
+			
 			for(int i=0;i<N;i++) {
-				Arrays.fill(cost[i], Integer.MAX_VALUE/100);
+				Arrays.fill(cost[i], Integer.MAX_VALUE/10);
 			}
 			
 			for(int i=0;i<N;i++) {
@@ -52,34 +35,45 @@ public class Main {
 					map[i][j] = Integer.parseInt(st.nextToken());
 				}
 			}
-			
-			int result = bfs();
-			
-			System.out.println("Problem " + (cnt++) + ": " + result);
 
+			int result = BFS();
+			sb.append("Problem ").append(num).append(": ").append(result).append("\n");
+			num++;
+			
+//			System.out.println("=====================================");
+//			for(int i=0;i<N;i++) {
+//				System.out.println(Arrays.toString(cost[i]));
+//			}
+			
 		}
+		
+		System.out.println(sb.toString());
+
 	}
 
-	
-	static int bfs() {
-		PriorityQueue<Cell> que = new PriorityQueue<>();
-		que.offer(new Cell(0,0,map[0][0]));
+
+	private static int BFS() {
+		Queue<int[]> queue = new ArrayDeque<>();
+		queue.offer(new int[] {0,0});
 		cost[0][0] = map[0][0];
-		while(!que.isEmpty()) {
-			Cell cur = que.poll();
-			int cr = cur.r;
-			int cc = cur.c;
-			if(cost[cr][cc] < cur.cost) continue;
-			for (int d = 0; d < 4; d++) {
-				int nr = cr + dr[d];
-				int nc = cc + dc[d];
-				if(!check(nr,nc)) continue;
-				if(cost[nr][nc] > cost[cr][cc]+map[nr][nc]) {
-					cost[nr][nc] = cost[cr][cc] + map[nr][nc];
-					que.offer(new Cell(nr,nc, map[nr][nc]));
+		
+		while(!queue.isEmpty()) {
+			int[] temp = queue.poll();
+			int r = temp[0];
+			int c = temp[1];
+
+			for(int i=0;i<4;i++) {
+				int nr = r + dr[i];
+				int nc = c + dc[i];
+				if(check(nr,nc) == false) continue;
+				if(cost[r][c] + map[nr][nc] < cost[nr][nc]) {
+					cost[nr][nc] = cost[r][c] + map[nr][nc];
+					queue.offer(new int[] {nr,nc});
 				}
 			}
+			
 		}
+		
 		return cost[N-1][N-1];
 	}
 
