@@ -33,19 +33,10 @@ public class Main {
 		
 		st = new StringTokenizer(br.readLine());
 		for(int i=0;i<N;i++) {
-			list.add(Long.parseLong(st.nextToken()));
+			total[i] = Long.parseLong(st.nextToken());
 		}
-		
-		
-		Collections.sort(list);
-		Collections.reverse(list);
-		
-		for(int i=0;i<list.size();i++) {
-			total[i] = list.get(i);
-		}
-		
-//		System.out.println(Arrays.toString(total));
-		
+
+
 		for(int i=0;i<temp;i++) {
 			if(num==0 && total[i] <= num) {
 				result = i+1;
