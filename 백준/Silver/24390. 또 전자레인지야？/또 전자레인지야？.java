@@ -1,49 +1,22 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	static int M,S;
-	static int result;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine(), ":");
+		int cnt = 0;
+		int sec = Integer.parseInt(st.nextToken()) * 60 + Integer.parseInt(st.nextToken());
+		cnt += sec / 600;
+		sec %= 600;
+		cnt += sec / 60;
+		sec %= 60;
+		cnt += Math.max(sec / 30, 1);
+		sec %= 30;
+		cnt += sec / 10;
+		sec %= 10;
+		System.out.println(cnt);
 		
-		M = Integer.parseInt(st.nextToken());
-		S = Integer.parseInt(st.nextToken());
-		
-//		System.out.println(M + " : " + S);
-		
-		int total = M * 60 + S;
-		int flag = 0;
-		
-		if(total / 600 > 0) {
-			result += total / 600;
-			total %= 600;
-		}
-		
-		if(total / 60 > 0) {
-			result += total / 60;
-			total %= 60;
-		}
-		
-		if(total /30 > 0) {
-			result += total / 30;
-			total %= 30;
-			flag ++;
-		}
-		
-		if(total != 0) {
-			result += total / 10;
-		}
-		
-		if(flag==0) result++;
-		
-		System.out.println(result);
 	}
-
 }
-
-
-// 10, 60, 600, (조리시작 - 0일때 +30)
