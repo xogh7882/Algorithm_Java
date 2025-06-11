@@ -54,7 +54,6 @@ public class Main {
 					max = order[orderIdx];
 					visited[now] = true;
 				}
-				
 				now++;
 				if(now==N) now = 0;
 				
