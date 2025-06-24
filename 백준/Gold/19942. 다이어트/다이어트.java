@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main{
+public class Main {
 	static int N;
 	static int std[];
 	static int list[][];
@@ -35,7 +35,7 @@ public class Main{
 		if(resultCost == Integer.MAX_VALUE) System.out.println("-1");
 		else {
 			System.out.println(resultCost);
-			System.out.println(resultOrder.trim());
+			System.out.println(resultOrder);
 		}
 	}
 
