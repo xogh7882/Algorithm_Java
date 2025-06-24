@@ -2,45 +2,42 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main{
 	static int N;
-	static int limit[];
-	static int num[][];
-	
-	static String order;
-	static int mincost = Integer.MAX_VALUE;
-	
+	static int std[];
+	static int list[][];
 	static boolean visited[];
+	static int resultCost = Integer.MAX_VALUE;
+	static String resultOrder = "";
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		limit = new int[4];
+		StringTokenizer st;
 		
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(br.readLine());
+		
+		std = new int[4];
+		st = new StringTokenizer(br.readLine());
 		for(int i=0;i<4;i++) {
-			limit[i] = Integer.parseInt(st.nextToken());
+			std[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		num = new int[N][5];
+		list = new int[N][5];
 		for(int i=0;i<N;i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0;j<5;j++) {
-				num[i][j] = Integer.parseInt(st.nextToken());
+				list[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
 		visited = new boolean[N];
 		subset(0);
-		if(mincost == Integer.MAX_VALUE) {
-			System.out.println(-1);
-		}
+		if(resultCost == Integer.MAX_VALUE) System.out.println("-1");
 		else {
-			System.out.println(mincost);
-			System.out.println(order);
+			System.out.println(resultCost);
+			System.out.println(resultOrder.trim());
 		}
 	}
-
 
 	private static void subset(int cnt) {
 		if(cnt==N) {
@@ -55,38 +52,35 @@ public class Main {
 		
 	}
 
-
 	private static void calc() {
-		String str = "";
 		int sum[] = new int[5];
+		String order= "";
 		
 		for(int i=0;i<N;i++) {
 			if(visited[i] == true) {
-				str+=Integer.toString(i+1);
-				str+=" ";
 				for(int j=0;j<5;j++) {
-					sum[j] += num[i][j];
+					sum[j] += list[i][j];
 				}
+				order += (i+1) + " ";
 			}
 		}
 		
 		for(int i=0;i<4;i++) {
-			if(limit[i] > sum[i]) return;
+			if(std[i] > sum[i]) return;
 		}
 		
-		if(sum[4] < mincost) {
-			mincost = sum[4];
-			order = str;
+		
+		if(resultCost > sum[4]) {
+			resultCost = sum[4];
+			resultOrder = order;
 		}
 		
-        // 같으면 앞에서 부터 비교해서 사전 순서가 빠른걸로
-		else if(sum[4] == mincost) {
-			if(order.length() == 0 || str.compareTo(order) < 0) {
-				order = str;
+		else if(resultCost == sum[4]) {
+			if(resultOrder.compareTo(order) > 0) {
+				resultOrder = order;
 			}
 		}
 		
-		return;
 		
 	}
 
