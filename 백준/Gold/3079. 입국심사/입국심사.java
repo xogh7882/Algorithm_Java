@@ -3,7 +3,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main {
+public class Main{
 	static int N,M;
 	static long T[];
 	
@@ -30,8 +30,6 @@ public class Main {
 			
 			long time = (left + right) / 2;
 			
-//			System.out.println("time : " + time);
-			
 			if(check(time) >= M) {
 				right = time-1;
 			}
@@ -39,9 +37,7 @@ public class Main {
 				left = time+1;
 			}
 			
-//			System.out.println("left : " + left + " | right : " + right + " | num : " + check(time) );
 		}
-		
 		
 		System.out.println(left);
 	
@@ -52,7 +48,8 @@ public class Main {
 		
 		for(int i=0;i<N;i++) {
 			long now = time / T[i];
-			if(result > M - now) {
+			
+			if(result > M - now) {  // 여기서 result += now 했더니 그 result 값이 overflow 발생한듯
 				result = M;
 				break;
 			}
