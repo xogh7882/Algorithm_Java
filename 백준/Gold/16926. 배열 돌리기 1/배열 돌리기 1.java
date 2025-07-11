@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -24,9 +25,9 @@ public class Main {
             }
         }
         int start;
-
+        visited = new boolean[N][M];
         for(int i=0;i<R;i++) {
-            visited = new boolean[N][M];
+            init();
             start = 0;
             while (true) {
                 if (!check(start, start) || visited[start][start]) break;
@@ -36,6 +37,12 @@ public class Main {
         }
         printMap();
 
+    }
+
+    private static void init() {
+        for(int i=0;i<N;i++) {
+           Arrays.fill(visited[i], false);
+        }
     }
 
     private static void rotate(int start) {
@@ -67,12 +74,14 @@ public class Main {
     }
 
     private static void printMap() {
+        StringBuilder sb = new StringBuilder();
         for(int i=0;i<N;i++){
             for(int j=0;j<M;j++){
-                if(j!=M-1) System.out.print(map[i][j]+" ");
-                else  System.out.print(map[i][j]);
+                sb.append(map[i][j]);
+                if(j!=M-1) sb.append(" ");
             }
-            System.out.println();
+            if(i!=N-1) sb.append("\n");
         }
+        System.out.println(sb.toString());
     }
 }
