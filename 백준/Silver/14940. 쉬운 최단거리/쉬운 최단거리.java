@@ -36,16 +36,18 @@ public class Main {
 
         BFS(startR, startC);
 
+        StringBuilder sb = new StringBuilder();
+
         for(int i=0;i<N;i++){
             for(int j=0;j<M;j++){
                 if(result[i][j] == -1 && map[i][j] == 1) result[i][j] = -1;
                 else if(result[i][j] == -1 && map[i][j] != 1) result[i][j] = 0;
-                System.out.print(result[i][j]);
-                if(j!=M-1) System.out.print(" ");
+                sb.append(result[i][j]);
+                if(j!=M-1) sb.append(" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
-
+        System.out.println(sb.toString());
     }
 
     private static void BFS(int startR, int startC) {
