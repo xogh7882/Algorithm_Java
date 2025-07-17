@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class Main {
+public class Main{
     static char map[][];
     static int result = 0;
     public static void main(String[] args) throws Exception {
@@ -30,16 +30,15 @@ public class Main {
     }
 
     private static boolean canwin(int r, int c) {
-        boolean result = false;
         map[r][c] = 'X';
 
-        if(check1(r,c) >= 5) result = true;
-        if(check2(r,c) >= 5) result = true;
-        if(check3(r,c) >= 5) result = true;
-        if(check4(r,c) >= 5) result = true;
+        if(check1(r,c) >= 5) return true;
+        if(check2(r,c) >= 5) return true;
+        if(check3(r,c) >= 5) return true;
+        if(check4(r,c) >= 5) return true;
 
         map[r][c] = '.';
-        return result;
+        return false;
     }
 
     private static int check1(int r, int c) {
