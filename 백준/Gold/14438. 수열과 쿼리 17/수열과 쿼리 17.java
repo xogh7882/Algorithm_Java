@@ -8,7 +8,7 @@ public class Main{
     static int k,a,b;
 
     static int[] bucket;
-    static int bucketNum = 50;
+    static int bucketNum = 100;
 
     static StringBuilder sb = new StringBuilder();
 
