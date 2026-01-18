@@ -16,10 +16,6 @@ public class Main {
 
         for(int i=0;i<M;i++){
             st = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(st.nextToken());
-            int v = Integer.parseInt(st.nextToken());
-
-
         }
 
         // MST는 N-1 개의 간선으로 이루어짐 ( 1개 제거하면 갈라짐 )
