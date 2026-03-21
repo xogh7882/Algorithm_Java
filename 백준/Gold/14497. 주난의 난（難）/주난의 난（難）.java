@@ -1,101 +1,87 @@
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-	static int N,M;
-	static int map[][];
-	static int x1,y1,x2,y2;
-	static int count = 1;
-	static int dr[] = {1,-1,0,0};
-	static int dc[] = {0,0,1,-1};
-	static boolean visited[][];
-	
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		
-		st = new StringTokenizer(br.readLine());
-		x1 = Integer.parseInt(st.nextToken());
-		y1 = Integer.parseInt(st.nextToken());
-		x2 = Integer.parseInt(st.nextToken());
-		y2 = Integer.parseInt(st.nextToken());
-		map = new int[N][M];
-		for(int i=0;i<N;i++) {
-			String str = br.readLine();
-			for(int j=0;j<M;j++) {
-				char ch = str.charAt(j);
-				if(ch=='1') map[i][j] = 3;  // 친구
-				else if(ch=='#') map[i][j] = 9; // 초코바
-				else if(ch=='0') map[i][j] = 0; // 빈공간
-				else if(ch=='*') map[i][j] = 1; // 주난
-			}
-		}
-		
-		
-		
-		while(true) {
-			//printMap();
-			visited = new boolean[N][M];
-			if(find()==true) break;
-			count++;
-		}
-		//printMap();
-		
-		System.out.println(count);
-		
-	}
+public class Main{
+    static int N,M;
+    static int startR, startC, endR, endC;
+    static int map[][];
 
-	private static void printMap() {
-		System.out.println("-----------------------");
-		for(int i=0;i<N;i++) {
-			System.out.println(Arrays.toString(map[i]));
-		}
-		System.out.println();
-	}
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
-	private static boolean find() {
-		Queue<int[]> queue = new ArrayDeque<>();
-		queue.offer(new int[] {x1-1, y1-1});
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
 
-		
-		while(!queue.isEmpty()) {
-			int temp[] = queue.poll();
-			int r = temp[0];
-			int c = temp[1];
-			visited[r][c] = true;
-			for(int i=0;i<4;i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
-				if(check(nr,nc) == false) continue;
-				if(nr == x2-1 && nc == y2-1) return true;
-				
-				else if(map[nr][nc] == 3 && visited[nr][nc] == false) {
-					map[nr][nc] = 0;
-					visited[nr][nc] = true;
+        st = new StringTokenizer(br.readLine());
+        startR = Integer.parseInt(st.nextToken());
+        startC = Integer.parseInt(st.nextToken());
+        endR = Integer.parseInt(st.nextToken());
+        endC = Integer.parseInt(st.nextToken());
 
-				}
-				else if (map[nr][nc] == 0 && visited[nr][nc] == false) {
-					queue.offer(new int[] {nr,nc});
-					visited[nr][nc] = true;
-				}
-			}
-		}
-			
-		
-		
-		return false;
-	}
+        map = new int[N+1][M+1];
 
-	private static boolean check(int r, int c) {
-		return r>=0 && r<N && c>=0 && c<M;
-	}
+        for(int i=1;i<=N;i++){
+            String str = br.readLine();
+            for(int j=1;j<=M;j++){
+                if(str.charAt(j-1) == '1') map[i][j] = 1;
+                else map[i][j] = 0;
+            }
+        }
 
+        int time = 0;
+        while(true){
+            time++;
+            if(jump()) break;
+        }
+
+        System.out.println(time);
+
+    }
+
+    static int dr[] = {0,0,1,-1};
+    static int dc[] = {1,-1,0,0};
+
+    public static boolean jump(){
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{startR, startC});
+        boolean visited[][] = new boolean[N+1][M+1];
+        visited[startR][startC] = true;
+
+        while(!queue.isEmpty()){
+            int[] cur = queue.poll();
+            int nowR = cur[0];
+            int nowC = cur[1];
+
+            if(nowR == endR && nowC == endC) return true;
+
+            for(int i=0;i<4;i++){
+                int nr = nowR + dr[i];
+                int nc = nowC + dc[i];
+
+                if(!check(nr,nc) || visited[nr][nc]) continue;
+
+                if(map[nr][nc] == 1 && !visited[nr][nc]){
+                    visited[nr][nc] = true;
+                    map[nr][nc] = 0;
+                }
+                else if(!visited[nr][nc]){
+                    visited[nr][nc] = true;
+                    queue.offer(new int[]{nr,nc});
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    public static boolean check(int r, int c){
+        return r>=1 && r<=N && c>=1 && c<=M;
+    }
 }
