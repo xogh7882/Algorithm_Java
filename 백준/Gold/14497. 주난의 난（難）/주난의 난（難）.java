@@ -2,6 +2,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -9,6 +10,7 @@ public class Main{
     static int N,M;
     static int startR, startC, endR, endC;
     static int map[][];
+    static boolean visited[][];
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,7 +27,8 @@ public class Main{
         endC = Integer.parseInt(st.nextToken());
 
         map = new int[N+1][M+1];
-
+        visited = new boolean[N+1][M+1];
+        
         for(int i=1;i<=N;i++){
             String str = br.readLine();
             for(int j=1;j<=M;j++){
@@ -50,7 +53,9 @@ public class Main{
     public static boolean jump(){
         Queue<int[]> queue = new ArrayDeque<>();
         queue.offer(new int[]{startR, startC});
-        boolean visited[][] = new boolean[N+1][M+1];
+        for(int i=0;i<=N;i++){
+            Arrays.fill(visited[i], false);
+        }
         visited[startR][startC] = true;
 
         while(!queue.isEmpty()){
